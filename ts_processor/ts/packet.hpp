@@ -1,12 +1,12 @@
-#ifndef __INCLUDED_TS_ANALYZER_TS_PACKET_HPP__
-#define __INCLUDED_TS_ANALYZER_TS_PACKET_HPP__
+#ifndef __INCLUDED_TS_PROCESSOR_TS_PACKET_HPP__
+#define __INCLUDED_TS_PROCESSOR_TS_PACKET_HPP__
 
-#include <ts_analyzer/ts/adaptation_field.hpp>
-#include <ts_analyzer/ts/payload.hpp>
+#include <ts_processor/ts/adaptation_field.hpp>
+#include <ts_processor/ts/payload.hpp>
 #include <bitfield/bitfield.hpp>
 #include <array>
 
-namespace ts_analyzer { namespace ts {
+namespace ts_processor { namespace ts {
     // see: ISO/IEC 13818-1, 2.4.3.2, Table 2-2
     union packet {
         static constexpr std::size_t SIZE = 188;
@@ -37,4 +37,4 @@ namespace ts_analyzer { namespace ts {
     };
 }}
 
-#endif // __INCLUDED_TS_ANALYZER_TS_PACKET_HPP__
+#endif // __INCLUDED_TS_PROCESSOR_TS_PACKET_HPP__

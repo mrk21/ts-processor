@@ -1,8 +1,8 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <ts_analyzer/ts/packet.hpp>
+#include <ts_processor/ts/packet.hpp>
 #include <bitfield/iostream.hpp>
 
-namespace ts_analyzer { namespace ts {
+namespace ts_processor { namespace ts {
 go_bandit([]{
     using namespace bandit;
     

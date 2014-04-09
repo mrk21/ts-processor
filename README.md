@@ -1,4 +1,4 @@
-ts-analyzer
+ts-processor
 ===========
 
-MPEG-2 Transport Stream analyzing tools.
+MPEG-2 Transport Stream processing tools.

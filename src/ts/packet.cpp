@@ -1,8 +1,8 @@
-#include <ts_analyzer/ts/packet.hpp>
+#include <ts_processor/ts/packet.hpp>
 #include <bitfield/byte_type.hpp>
 #include <iostream>
 
-namespace ts_analyzer { namespace ts {
+namespace ts_processor { namespace ts {
     namespace {
         constexpr bitfield::byte_type _ADAPTATION_OFFSET =
             bitfield::bit_type(packet::continuity_counter_type::NEXT_OFFSET).byte();

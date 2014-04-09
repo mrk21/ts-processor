@@ -13,5 +13,5 @@ INCLUDE_PATH += ${ROOT_DIR}/vendor/bitfield
 LIBRARY_PATH += ${ROOT_DIR}/src
 LIBRARY += ${LIB_NAME}
 
-LIB_NAME = ts_analyzer
+LIB_NAME = ts_processor
 LIB = ${ROOT_DIR}/src/lib${LIB_NAME}.a

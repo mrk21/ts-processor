@@ -1,10 +1,10 @@
-#ifndef __INCLUDED_TS_ANALYZER_TS_PAYLOAD__
-#define __INCLUDED_TS_ANALYZER_TS_PAYLOAD__
+#ifndef __INCLUDED_TS_PROCESSOR_TS_PAYLOAD__
+#define __INCLUDED_TS_PROCESSOR_TS_PAYLOAD__
 
 #include <bitfield/bitfield.hpp>
 #include <array>
 
-namespace ts_analyzer { namespace ts {
+namespace ts_processor { namespace ts {
     union payload {
         std::array<uint8_t,1> container;
         
@@ -12,4 +12,4 @@ namespace ts_analyzer { namespace ts {
     };
 }}
 
-#endif //__INCLUDED_TS_ANALYZER_TS_PAYLOAD__
+#endif //__INCLUDED_TS_PROCESSOR_TS_PAYLOAD__
