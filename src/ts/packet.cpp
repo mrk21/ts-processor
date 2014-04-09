@@ -1,6 +1,5 @@
 #include <ts_processor/ts/packet.hpp>
 #include <bitfield/byte_type.hpp>
-#include <iostream>
 
 namespace ts_processor { namespace ts {
     namespace {

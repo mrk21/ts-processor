@@ -36,7 +36,7 @@ go_bandit([]{
             
             describe("when the adaptation_field_control was 0b11", [&]{
                 before_each([&]{ packet = new ts::packet{{{
-                    #include <fixture/ts/packet/adaptation_field_with_payload.txt>
+                    #include <fixture/ts/packet/adaptation_field_and_payload.txt>
                 }}}; });
                 
                 it("should not be a nullptr", [&]{
@@ -76,7 +76,7 @@ go_bandit([]{
             
             describe("when the adaptation_field_control_type was 0b11", [&]{
                 before_each([&]{ packet = new ts::packet{{{
-                    #include <fixture/ts/packet/adaptation_field_with_payload.txt>
+                    #include <fixture/ts/packet/adaptation_field_and_payload.txt>
                 }}}; });
                 
                 it("should not be a nullptr", [&]{
