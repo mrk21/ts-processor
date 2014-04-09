@@ -29,7 +29,7 @@ go_bandit([]{
                     AssertThat(packet->adaptation_field() == nullptr, Equals(false));
                 });
                 
-                it("'s adaptation_field_length was 0xB7", [&]{
+                it("'s adaptation_field_length should be 0xB7", [&]{
                     AssertThat(packet->adaptation_field()->adaptation_field_length, Equals(0xB7));
                 });
             });
@@ -43,7 +43,7 @@ go_bandit([]{
                     AssertThat(packet->adaptation_field() == nullptr, Equals(false));
                 });
                 
-                it("'s adaptation_field_length was 0x3F", [&]{
+                it("'s adaptation_field_length should be 0x3F", [&]{
                     AssertThat(packet->adaptation_field()->adaptation_field_length, Equals(0x3F));
                 });
             });
