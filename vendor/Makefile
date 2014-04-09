@@ -1,6 +1,6 @@
 TARGETS = bitfield bandit bandit_with_gmock googlemock
 
-BITFIELD_VERSION = v0.2.0
+BITFIELD_VERSION = ts_processor_extension
 BANDIT_VERSION = v1.1.4
 BANDIT_WITH_GMOCK_VERSION = v1.1.1
 GOOGLEMOCK_VERSION = 1.7.0

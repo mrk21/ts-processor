@@ -1,19 +1,26 @@
 include ../common.mk
 
-TARGET = tssplitter
-SRCS = $(basename $(shell find . -name '*.cpp'))
+MAIN = tssplitter
+LIB_SRC = $(basename $(shell find ${ROOT_DIR}/src -name '*.cpp' $(addprefix -not -name , $(addsuffix .cpp, ${MAIN}))))
+SRC = ${MAIN} ${LIB_SRC}
 
 .PHONY: all
-all: ${TARGET}
+all: ${MAIN}
+
+.PHONY: lib
+lib: ${LIB}
 
 .PHONY: clean
 clean:
-	${RM} ${TARGET} $(addsuffix .d, ${SRCS}) $(addsuffix .o, ${SRCS})
+	${RM} ${MAIN} ${LIB} $(addsuffix .d, ${SRC}) $(addsuffix .o, ${SRC})
 
 .PHONY: rebuild
 rebuild: clean all
 
-${TARGET}: $(addsuffix .o, ${SRCS})
-	${CXX} ${LDFLAGS} -o $@ $^
+${LIB}: $(addsuffix .o, ${LIB_SRC})
+	${AR} r $@ $^
 
--include $(addsuffix .d, ${SRCS})
+${MAIN}: $(addsuffix .o, ${SRC}) ${LIB}
+	${CXX} ${LDFLAGS} -o $@ $<
+
+-include $(addsuffix .d, ${SRC})
