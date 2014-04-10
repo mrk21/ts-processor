@@ -12,7 +12,7 @@ go_bandit([]{
         describe("#adaptation_field()", [&]{
             describe("when the adaptation_field_control_type was 0b01", [&]{
                 before_each([&]{ packet = new ts::packet{{{
-                    #include <fixture/ts/packet/payload_only.txt>
+                    #include <fixture/ts/packet/payload_only.cpp>
                 }}}; });
                 
                 it("should be a nullptr", [&]{
@@ -22,7 +22,7 @@ go_bandit([]{
             
             describe("when the adaptation_field_control was 0b10", [&]{
                 before_each([&]{ packet = new ts::packet{{{
-                    #include <fixture/ts/packet/adaptation_field_only.txt>
+                    #include <fixture/ts/packet/adaptation_field_only.cpp>
                 }}}; });
                 
                 it("should not be a nullptr", [&]{
@@ -36,7 +36,7 @@ go_bandit([]{
             
             describe("when the adaptation_field_control was 0b11", [&]{
                 before_each([&]{ packet = new ts::packet{{{
-                    #include <fixture/ts/packet/adaptation_field_and_payload.txt>
+                    #include <fixture/ts/packet/adaptation_field_and_payload.cpp>
                 }}}; });
                 
                 it("should not be a nullptr", [&]{
@@ -52,7 +52,7 @@ go_bandit([]{
         describe("#payload()", [&]{
             describe("when the adaptation_field_control_type was 0b01", [&]{
                 before_each([&]{ packet = new ts::packet{{{
-                    #include <fixture/ts/packet/payload_only.txt>
+                    #include <fixture/ts/packet/payload_only.cpp>
                 }}}; });
                 
                 it("should not be a nullptr", [&]{
@@ -60,13 +60,13 @@ go_bandit([]{
                 });
                 
                 it("'s first byte should be 0x00", [&]{
-                    AssertThat(static_cast<uint32_t>(packet->payload()->container[0]), Equals(0x00));
+                    AssertThat(static_cast<uint32_t>(*(uint8_t *)packet->payload()), Equals(0x00));
                 });
             });
             
             describe("when the adaptation_field_control_type was 0b10", [&]{
                 before_each([&]{ packet = new ts::packet{{{
-                    #include <fixture/ts/packet/adaptation_field_only.txt>
+                    #include <fixture/ts/packet/adaptation_field_only.cpp>
                 }}}; });
                 
                 it("should be a nullptr", [&]{
@@ -76,7 +76,7 @@ go_bandit([]{
             
             describe("when the adaptation_field_control_type was 0b11", [&]{
                 before_each([&]{ packet = new ts::packet{{{
-                    #include <fixture/ts/packet/adaptation_field_and_payload.txt>
+                    #include <fixture/ts/packet/adaptation_field_and_payload.cpp>
                 }}}; });
                 
                 it("should not be a nullptr", [&]{
@@ -84,7 +84,7 @@ go_bandit([]{
                 });
                 
                 it("'s first byte should be 0x34", [&]{
-                    AssertThat(static_cast<uint32_t>(packet->payload()->container[0]), Equals(0x34));
+                    AssertThat(static_cast<uint32_t>(*(uint8_t *)packet->payload()), Equals(0x34));
                 });
             });
         });
