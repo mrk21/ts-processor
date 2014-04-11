@@ -17,56 +17,56 @@ go_bandit([]{
         });
         
         describe("#sections", [&]{
-            it("should iterated the sections", [&]{
+            it("should iterate each fieldset in the section", [&]{
                 auto & sections = packet->payload->pmt.sections;
                 auto it = sections.begin();
                 auto end = sections.end();
                 
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0111));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0112));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0114));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0810));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0811));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0812));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0813));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0816));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x081A));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x081B));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x081F));
                 
                 ++it;
-                AssertThat(it != end, Equals(false));
+                AssertThat(it, Equals(end));
             });
         });
     });

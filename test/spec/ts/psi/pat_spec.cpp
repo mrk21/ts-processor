@@ -17,32 +17,32 @@ go_bandit([]{
         });
         
         describe("#sections", [&]{
-            it("should iterated the sections", [&]{
+            it("should iterate each fieldset in the section", [&]{
                 auto & sections = packet->payload->pat.sections;
                 auto it = sections.begin();
                 auto end = sections.end();
                 
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->pid, Equals(0x0010));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->pid, Equals(0x0101));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->pid, Equals(0x0102));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->pid, Equals(0x1FC8));
                 
                 ++it;
-                AssertThat(it != end, Equals(true));
+                AssertThat(it, not Equals(end));
                 AssertThat(it->pid, Equals(0x1FC9));
                 
                 ++it;
-                AssertThat(it != end, Equals(false));
+                AssertThat(it, Equals(end));
             });
         });
     });

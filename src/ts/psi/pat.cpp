@@ -14,7 +14,7 @@ namespace ts_processor { namespace ts { namespace psi {
             bitfield::bit_type(pat::last_section_number_type::NEXT_OFFSET);
     }
     
-    uint8_t * pat::section_container_type::base_addr() {
+    const uint8_t * pat::section_container_type::base_addr() const {
         return _SECTIONS_OFFSET.addr(this);
     }
     
@@ -22,7 +22,6 @@ namespace ts_processor { namespace ts { namespace psi {
         static constexpr uint32_t _DIFF =
             _SECTIONS_OFFSET.diff(section_length_type::NEXT_OFFSET).add(32).byte();
         
-        return ((const pat *)this)->section_length - _DIFF;
+        return this->parent()->section_length - _DIFF;
     }
 }}}
-

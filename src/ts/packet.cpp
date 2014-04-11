@@ -19,7 +19,7 @@ namespace ts_processor { namespace ts {
         }
     }
     
-    std::size_t packet::adaptation_field_container_type::size() const {
+    std::size_t packet::adaptation_field_container_type::length() const {
         if (this->fieldset() == nullptr) return 0;
         return this->fieldset()->adaptation_field_length + 1;
     }
@@ -33,14 +33,14 @@ namespace ts_processor { namespace ts {
             return _ADAPTATION_OFFSET.addr(this);
         case 0b11:
             return _ADAPTATION_OFFSET
-                .add(this->parent()->adaptation_field.size())
+                .add(this->parent()->adaptation_field.length())
                 .addr(this);
         default:
             return nullptr;
         }
     }
     
-    std::size_t packet::payload_container_type::size() const {
+    std::size_t packet::payload_container_type::length() const {
         if (this->fieldset() == nullptr) return 0;
         return packet::SIZE - this->offset();
     }

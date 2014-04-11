@@ -32,9 +32,8 @@ namespace ts_processor { namespace ts { namespace psi {
             std::size_t length() const;
         };
         
-        class section_container_type: public bitfield::section::list<section_container_type, section_type> {
-        public:
-            uint8_t * base_addr();
+        struct section_container_type: public bitfield::section::list<section_container_type, section_type, pat> {
+            const uint8_t * base_addr() const;
             std::size_t length() const;
         };
         
