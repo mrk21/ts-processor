@@ -4,6 +4,7 @@
 #include <ts_processor/ts/adaptation_field.hpp>
 #include <ts_processor/ts/payload.hpp>
 #include <bitfield/bitfield.hpp>
+#include <bitfield/container/base.hpp>
 #include <array>
 
 namespace ts_processor { namespace ts {
@@ -21,6 +22,16 @@ namespace ts_processor { namespace ts {
         using adaptation_field_control_type     = transport_scrambling_control_type::next_bitfield< 2>;
         using continuity_counter_type           =     adaptation_field_control_type::next_bitfield< 4>;
         
+        struct adaptation_field_container_type: public bitfield::container::base<adaptation_field_container_type, ts::adaptation_field, packet> {
+            const uint8_t * base_addr() const;
+            std::size_t size() const;
+        };
+        
+        struct payload_container_type: public bitfield::container::base<payload_container_type, ts::payload, packet> {
+            const uint8_t * base_addr() const;
+            std::size_t size() const;
+        };
+        
         container_type container;
         
         sync_byte_type                     sync_byte;
@@ -32,8 +43,8 @@ namespace ts_processor { namespace ts {
         adaptation_field_control_type      adaptation_field_control;
         continuity_counter_type            continuity_counter;
         
-        ts::adaptation_field * adaptation_field();
-        ts::payload * payload();
+        adaptation_field_container_type  adaptation_field;
+        payload_container_type  payload;
     };
 }}
 

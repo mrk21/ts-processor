@@ -18,7 +18,7 @@ go_bandit([]{
         
         describe("#sections", [&]{
             it("should iterated the sections", [&]{
-                auto & sections = packet->payload()->pmt.sections;
+                auto & sections = packet->payload->pmt.sections;
                 auto it = sections.begin();
                 auto end = sections.end();
                 
