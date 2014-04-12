@@ -11,10 +11,10 @@ namespace ts_processor { namespace ts { namespace psi {
     }
 }}}
 
-// pmt::section_container_type
+// pmt::section_list_type
 namespace ts_processor { namespace ts { namespace psi {
     namespace {
-        bitfield::byte_type _sections_offset(const pmt::section_container_type * sections) {
+        bitfield::byte_type _sections_offset(const pmt::section_list_type * sections) {
             static constexpr uint32_t _PROGRAM_INFO_OFSET =
                 bitfield::bit_type(pmt::program_info_length_type::NEXT_OFFSET).byte();
             
@@ -22,11 +22,11 @@ namespace ts_processor { namespace ts { namespace psi {
         }
     }
     
-    const uint8_t * pmt::section_container_type::base_addr() const {
+    const uint8_t * pmt::section_list_type::base_addr() const {
         return _sections_offset(this).addr(this);
     }
     
-    std::size_t pmt::section_container_type::length() const {
+    std::size_t pmt::section_list_type::length() const {
         return this->parent()->section_length - _sections_offset(this).byte() - 1;
     }
 }}}

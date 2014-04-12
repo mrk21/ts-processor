@@ -8,17 +8,17 @@ go_bandit([]{
     using namespace bandit;
     
     describe("ts::psi::pat", [&]{
-        ts::packet * packet;
+        ts::packet packet;
         
         before_each([&]{
-            packet = new ts::packet{{{
+            packet = {
                 #include <fixture/ts/psi/pat/single_packet.cpp>
-            }}};
+            };
         });
         
         describe("#sections", [&]{
-            it("should iterate each fieldset in the section", [&]{
-                auto & sections = packet->payload->pat.sections;
+            it("should iterate each fieldset in the section list", [&]{
+                auto & sections = packet.payload->pat.sections;
                 auto it = sections.begin();
                 auto end = sections.end();
                 

@@ -3,9 +3,10 @@
 
 #include <ts_processor/ts/adaptation_field.hpp>
 #include <ts_processor/ts/payload.hpp>
-#include <bitfield/bitfield.hpp>
+#include <bitfield/field.hpp>
 #include <bitfield/section/base.hpp>
 #include <array>
+#include <initializer_list>
 
 namespace ts_processor { namespace ts {
     // see: ISO/IEC 13818-1, 2.4.3.2, Table 2-2
@@ -13,24 +14,25 @@ namespace ts_processor { namespace ts {
         static constexpr std::size_t SIZE = 188;
         using container_type = std::array<uint8_t, SIZE>;
         
-        using sync_byte_type                    =                               bitfield::bitfield< 8>;
-        using transport_error_indicator_type    =                    sync_byte_type::next_bitfield< 1>;
-        using payload_unit_start_indicator_type =    transport_error_indicator_type::next_bitfield< 1>;
-        using transport_priority_type           = payload_unit_start_indicator_type::next_bitfield< 1>;
-        using pid_type                          =           transport_priority_type::next_bitfield<13>;
-        using transport_scrambling_control_type =                          pid_type::next_bitfield< 2>;
-        using adaptation_field_control_type     = transport_scrambling_control_type::next_bitfield< 2>;
-        using continuity_counter_type           =     adaptation_field_control_type::next_bitfield< 4>;
+        using sync_byte_type                    =                               bitfield::field< 8>;
+        using transport_error_indicator_type    =                    sync_byte_type::next_field< 1>;
+        using payload_unit_start_indicator_type =    transport_error_indicator_type::next_field< 1>;
+        using transport_priority_type           = payload_unit_start_indicator_type::next_field< 1>;
+        using pid_type                          =           transport_priority_type::next_field<13>;
+        using transport_scrambling_control_type =                          pid_type::next_field< 2>;
+        using adaptation_field_control_type     = transport_scrambling_control_type::next_field< 2>;
+        using continuity_counter_type           =     adaptation_field_control_type::next_field< 4>;
         
-        struct adaptation_field_container_type: public bitfield::section::base<adaptation_field_container_type, ts::adaptation_field, packet> {
+        struct adaptation_field_section_type: public bitfield::section::base<adaptation_field_section_type, ts::adaptation_field, packet> {
             const uint8_t * base_addr() const;
             std::size_t length() const;
         };
         
-        struct payload_container_type: public bitfield::section::base<payload_container_type, ts::payload, packet> {
+        struct payload_section_type: public bitfield::section::base<payload_section_type, ts::payload, packet> {
             const uint8_t * base_addr() const;
             std::size_t length() const;
         };
+        
         
         container_type container;
         
@@ -43,8 +45,13 @@ namespace ts_processor { namespace ts {
         adaptation_field_control_type      adaptation_field_control;
         continuity_counter_type            continuity_counter;
         
-        adaptation_field_container_type  adaptation_field;
-        payload_container_type  payload;
+        adaptation_field_section_type  adaptation_field;
+        payload_section_type           payload;
+        
+        
+        packet() = default;
+        packet(std::initializer_list<uint8_t> list);
+        packet & operator =(std::initializer_list<uint8_t> list);
     };
 }}
 

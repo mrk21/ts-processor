@@ -3,7 +3,7 @@
 
 #include <ts_processor/ts/psi/pat.hpp>
 #include <ts_processor/ts/psi/pmt.hpp>
-#include <bitfield/bitfield.hpp>
+#include <bitfield/field.hpp>
 #include <array>
 
 namespace ts_processor { namespace ts {
