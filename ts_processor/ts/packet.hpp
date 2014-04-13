@@ -12,7 +12,7 @@ namespace ts_processor { namespace ts {
     // see: ISO/IEC 13818-1, 2.4.3.2, Table 2-2
     union packet {
         static constexpr std::size_t SIZE = 188;
-        using container_type = std::array<uint8_t, SIZE>;
+        using container_type = bitfield::container::array<SIZE>;
         
         using sync_byte_type                    =                               bitfield::field< 8>;
         using transport_error_indicator_type    =                    sync_byte_type::next_field< 1>;
