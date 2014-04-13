@@ -5,7 +5,7 @@
 #include <bitfield/container/vector.hpp>
 
 namespace ts_processor { namespace ts {
-    struct payload_builder {
+    class payload_builder {
         bitfield::container::vector container;
         
     public:
