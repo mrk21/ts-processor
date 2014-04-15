@@ -1,7 +1,4 @@
 #include <ts_processor/ts/payload_builder.hpp>
-#include <iterator>
-#include <algorithm>
-#include <exception>
 
 namespace ts_processor { namespace ts {
     void payload_builder::push(const ts::packet & packet) {
@@ -26,11 +23,7 @@ namespace ts_processor { namespace ts {
             }
         }
         
-        std::copy(
-            packet.payload.begin(),
-            packet.payload.end(),
-            std::back_insert_iterator<decltype(this->container)>(this->container)
-        );
+        for (auto v: packet.payload) this->container.push_back(v);
         
         ++this->n;
     }

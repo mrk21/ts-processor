@@ -8,11 +8,11 @@ namespace ts_processor { namespace ts {
             bitfield::bit_type(packet::continuity_counter_type::NEXT_OFFSET).byte();
     }
     
-    packet::packet(std::initializer_list<uint8_t> list) {
+    packet::packet(bitfield::container::initializer_list list) {
         std::copy(list.begin(), list.end(), this->container.begin());
     }
     
-    packet & packet::operator =(std::initializer_list<uint8_t> list) {
+    packet & packet::operator =(bitfield::container::initializer_list list) {
         std::copy(list.begin(), list.end(), this->container.begin());
         return *this;
     }

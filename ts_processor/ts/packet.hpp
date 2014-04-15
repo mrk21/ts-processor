@@ -4,9 +4,8 @@
 #include <ts_processor/ts/adaptation_field.hpp>
 #include <ts_processor/ts/payload.hpp>
 #include <bitfield/field.hpp>
+#include <bitfield/container/initializer_list.hpp>
 #include <bitfield/section/base.hpp>
-#include <array>
-#include <initializer_list>
 
 namespace ts_processor { namespace ts {
     // see: ISO/IEC 13818-1, 2.4.3.2, Table 2-2
@@ -50,8 +49,8 @@ namespace ts_processor { namespace ts {
         
         
         packet() = default;
-        packet(std::initializer_list<uint8_t> list);
-        packet & operator =(std::initializer_list<uint8_t> list);
+        packet(bitfield::container::initializer_list list);
+        packet & operator =(bitfield::container::initializer_list list);
     };
 }}
 
