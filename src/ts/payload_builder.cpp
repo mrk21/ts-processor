@@ -1,7 +1,7 @@
 #include <ts_processor/ts/payload_builder.hpp>
 
 namespace ts_processor { namespace ts {
-    void payload_builder::push(const ts::packet & packet) {
+    bool payload_builder::push(const ts::packet & packet) {
         if (packet.sync_byte != 0x47) {
             throw invalid_sync_byte_exception("A sync byte of the packet isn't 0x47!");
         }
@@ -12,6 +12,7 @@ namespace ts_processor { namespace ts {
             }
             
             this->pid = packet.pid;
+            this->length = packet.payload->length();
         }
         else {
             if (packet.pid != this->pid) {
@@ -21,11 +22,16 @@ namespace ts_processor { namespace ts {
             if (packet.payload_unit_start_indicator == 1) {
                 throw invalid_payload_unit_start_indicator_exception("A payload unit start indicator of the packet is 1!");
             }
+            
+            if (this->length <= 0) return true;
         }
         
         for (auto v: packet.payload) this->container.push_back(v);
         
         ++this->n;
+        this->length -= packet.payload.length();
+        
+        return this->length <= 0;
     }
     
     const ts::payload * payload_builder::payload() const {

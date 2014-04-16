@@ -9,7 +9,7 @@ go_bandit([]{
     describe("ts::payload", [&]{
         describe("#length()", [&]{
             describe("when a packet type was the PES", [&]{
-                it("should be the PES length", [&]{
+                it("should be a length of the PES", [&]{
                     ts::packet packet{
                         #include <fixture/ts/pes/minimum.cpp>
                     };
@@ -21,7 +21,7 @@ go_bandit([]{
             });
             
             describe("when a packet type was the PSI", [&]{
-                it("should be the PSI length", [&]{
+                it("should be a length of the PSI", [&]{
                     ts::packet packet{
                         #include <fixture/ts/psi/pat/single_packet.cpp>
                     };

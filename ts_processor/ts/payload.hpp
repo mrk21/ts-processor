@@ -10,8 +10,9 @@
 namespace ts_processor { namespace ts {
     union payload {
         // PSI/SI
+        // memo: The value of the pointer_field is assumed that it is always 0x00.
         struct {
-            uint8_t pointer_field;
+            uint8_t pointer_field; // 0x00
             union {
                 psi::base psi;
                 psi::pat pat;

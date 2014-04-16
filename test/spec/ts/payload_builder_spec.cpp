@@ -52,64 +52,88 @@ go_bandit([]{
         });
         
         describe("#push(const ts::packet & packet)", [&]{
-            describe("a sync byte of the packet", [&]{
-                describe("when it was 0x47", [&]{
-                    it("should push the packet to this container", [&]{
-                        push_test<payload_builder::invalid_sync_byte_exception>()(builder, _MULTI_PACKET_1, false);
+            describe("return value", [&]{
+                describe("when the payload was not constructed", [&]{
+                    it("should be false", [&]{
+                        AssertThat(builder->push(_MULTI_PACKET_1), Equals(false));
                     });
                 });
                 
-                describe("when it wasn't 0x47", [&]{
-                    it("should throw a invalid_sync_byte_exception, on top of that, not push the packet to this container", [&]{
-                        push_test<payload_builder::invalid_sync_byte_exception>()(builder, _INVALID_PACKET, true);
-                    });
-                });
-            });
-            
-            describe("a PID of the packet", [&]{
-                describe("when not emptied this container" ,[&]{
-                    describe("when pushed the packet of a different PID", [&]{
-                        it("should throw a invalid_pid_exeption, on top of that, not push the packet to this container", [&]{
-                            builder->push(_DIFFERENT_PID_PACKET);
-                            push_test<payload_builder::invalid_pid_exeption>()(builder, _MULTI_PACKET_2, true);
-                        });
-                    });
-                });
-            });
-            
-            describe("a payload_unit_start_indicator of the packet", [&]{
-                describe("when emptied this container", [&]{
-                    describe("when it was 1", [&]{
-                        it("should push the packet to this container", [&]{
-                            push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_1, false);
-                        });
-                    });
-                    
-                    describe("when it was 0", [&]{
-                        it("should throw a invalid_payload_unit_start_indicator_exception, on top of that, not push the packet to this container", [&]{
-                            push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_2, true);
-                        });
-                    });
-                });
-                
-                describe("when not emptied this container", [&]{
-                    before_each([&]{
+                describe("when the payload was completed construction", [&]{
+                    it("should be true", [&]{
                         builder->push(_MULTI_PACKET_1);
-                        builder->push(_MULTI_PACKET_2);
+                        AssertThat(builder->push(_MULTI_PACKET_2), Equals(true));
                     });
-                    
-                    describe("when it was 1", [&]{
-                        it("should throw a invalid_payload_unit_start_indicator_exception, on top of that, not push the packet to this container", [&]{
-                            push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_1, true);
-                        });
+                });
+                
+                describe("after the payload was constructed", [&]{
+                    it("should return true, on top of that, not push the packet to this container", [&]{
+                        builder->push(_MULTI_PACKET_1);
+                        AssertThat(builder->push(_MULTI_PACKET_2), Equals(true));
+                        std::size_t size = builder->size();
+                        AssertThat(builder->push(_MULTI_PACKET_2), Equals(true));
+                        AssertThat(builder->size(), Equals(size));
                     });
-                    
-                    describe("when it was 0", [&]{
+                });
+            });
+            
+            describe("packet", [&]{
+                describe("a sync byte of the packet", [&]{
+                    describe("when it was 0x47", [&]{
                         it("should push the packet to this container", [&]{
-                            push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_2, false);
+                            push_test<payload_builder::invalid_sync_byte_exception>()(builder, _MULTI_PACKET_1, false);
                         });
                     });
-                 });
+                    
+                    describe("when it wasn't 0x47", [&]{
+                        it("should throw a invalid_sync_byte_exception, on top of that, not push the packet to this container", [&]{
+                            push_test<payload_builder::invalid_sync_byte_exception>()(builder, _INVALID_PACKET, true);
+                        });
+                    });
+                });
+                
+                describe("a PID of the packet", [&]{
+                    describe("when not emptied this container" ,[&]{
+                        describe("when pushed the packet of a different PID", [&]{
+                            it("should throw a invalid_pid_exeption, on top of that, not push the packet to this container", [&]{
+                                builder->push(_DIFFERENT_PID_PACKET);
+                                push_test<payload_builder::invalid_pid_exeption>()(builder, _MULTI_PACKET_2, true);
+                            });
+                        });
+                    });
+                });
+                
+                describe("a payload_unit_start_indicator of the packet", [&]{
+                    describe("when emptied this container", [&]{
+                        describe("when it was 1", [&]{
+                            it("should push the packet to this container", [&]{
+                                push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_1, false);
+                            });
+                        });
+                        
+                        describe("when it was 0", [&]{
+                            it("should throw a invalid_payload_unit_start_indicator_exception, on top of that, not push the packet to this container", [&]{
+                                push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_2, true);
+                            });
+                        });
+                    });
+                    
+                    describe("when not emptied this container", [&]{
+                        describe("when it was 1", [&]{
+                            it("should throw a invalid_payload_unit_start_indicator_exception, on top of that, not push the packet to this container", [&]{
+                                builder->push(_MULTI_PACKET_1);
+                                push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_1, true);
+                            });
+                        });
+                        
+                        describe("when it was 0", [&]{
+                            it("should push the packet to this container", [&]{
+                                builder->push(_MULTI_PACKET_1);
+                                push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_2, false);
+                            });
+                        });
+                     });
+                });
             });
         });
         

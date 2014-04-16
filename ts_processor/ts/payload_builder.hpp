@@ -11,6 +11,7 @@ namespace ts_processor { namespace ts {
         bitfield::container::vector container;
         int32_t pid;
         std::size_t n;
+        int32_t length;
         
     public:
         struct invalid_sync_byte_exception: public std::invalid_argument {
@@ -27,7 +28,7 @@ namespace ts_processor { namespace ts {
         
         payload_builder() : pid(-1), n(0) {}
         
-        void push(const ts::packet & packet);
+        bool push(const ts::packet & packet);
         const ts::payload * payload() const;
         std::size_t size() const;
         int32_t current_pid() const;
