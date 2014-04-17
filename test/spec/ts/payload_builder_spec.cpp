@@ -2,34 +2,11 @@
 #include <bitfield/iostream.hpp>
 #include <bitfield/util.hpp>
 #include <ts_processor/ts/payload_builder.hpp>
+#include <initializer_list>
 
 namespace ts_processor { namespace ts {
-    namespace payload_builder_test {
-        template<class Exception>
-        struct push_test {
-            void operator ()(payload_builder * builder, const ts::packet & packet, bool expected_is_throw_exception){
-                using namespace bandit;
-                
-                bool is_throw_exception = false;
-                std::size_t size = builder->size();
-                
-                try {
-                    builder->push(packet);
-                }
-                catch (Exception & e) {
-                    is_throw_exception = true;
-                }
-                catch (...) {}
-                
-                AssertThat(is_throw_exception, Equals(expected_is_throw_exception));
-                AssertThat(builder->size(), Equals(size + (expected_is_throw_exception ? 0:1)));
-            }
-        };
-    }
-    
 go_bandit([]{
     using namespace bandit;
-    using namespace payload_builder_test;
     
     describe("ts::payload_builder", [&]{
         payload_builder * builder;
@@ -52,84 +29,109 @@ go_bandit([]{
         });
         
         describe("#push(const ts::packet & packet)", [&]{
-            describe("return value", [&]{
-                describe("when the payload was not constructed", [&]{
-                    it("should be false", [&]{
-                        AssertThat(builder->push(_MULTI_PACKET_1), Equals(false));
-                    });
-                });
+            auto _assert = [&](const ts::packet & target, std::initializer_list<payload_builder::status> expected_statuses) {
+                payload_builder::status_set expected_status_set;
+                std::size_t expected_size = builder->size();
                 
-                describe("when the payload was completed construction", [&]{
-                    it("should be true", [&]{
-                        builder->push(_MULTI_PACKET_1);
-                        AssertThat(builder->push(_MULTI_PACKET_2), Equals(true));
-                    });
-                });
+                for (auto status: expected_statuses) {
+                    expected_status_set.set(status);
+                    if (status == payload_builder::status::PUSHED) ++expected_size;
+                }
                 
-                describe("after the payload was constructed", [&]{
-                    it("should return true, on top of that, not push the packet to this container", [&]{
-                        builder->push(_MULTI_PACKET_1);
-                        AssertThat(builder->push(_MULTI_PACKET_2), Equals(true));
-                        std::size_t size = builder->size();
-                        AssertThat(builder->push(_MULTI_PACKET_2), Equals(true));
-                        AssertThat(builder->size(), Equals(size));
-                    });
+                AssertThat(builder->push(target), Equals(expected_status_set));
+                AssertThat(builder->size(), Equals(expected_size));
+            };
+            
+            describe("when the payload was not constructed", [&]{
+                it("should contain a status of the PUSHED into the status_set", [&]{
+                    _assert(_MULTI_PACKET_1, {payload_builder::status::PUSHED});
                 });
             });
             
-            describe("packet", [&]{
-                describe("a sync byte of the packet", [&]{
+            describe("when the payload was completed construction", [&]{
+                it("should contain a status of the COMPLETED into the status_set", [&]{
+                    _assert(_MULTI_PACKET_1, {payload_builder::status::PUSHED});
+                    _assert(_MULTI_PACKET_2, {payload_builder::status::PUSHED, payload_builder::status::COMPLETED});
+                });
+            });
+            
+            describe("after the payload was constructed", [&]{
+                it("should contain a status of the COMPLETED into the status_set, on top of that, not push the packet to this container", [&]{
+                    _assert(_MULTI_PACKET_1, {payload_builder::status::PUSHED});
+                    _assert(_MULTI_PACKET_2, {payload_builder::status::PUSHED, payload_builder::status::COMPLETED});
+                    _assert(_MULTI_PACKET_2, {                                 payload_builder::status::COMPLETED});
+                });
+            });
+            
+            describe("a traits of the packet", [&]{
+                describe("in case of the sync byte", [&]{
                     describe("when it was 0x47", [&]{
                         it("should push the packet to this container", [&]{
-                            push_test<payload_builder::invalid_sync_byte_exception>()(builder, _MULTI_PACKET_1, false);
+                            _assert(_MULTI_PACKET_1, {payload_builder::status::PUSHED});
                         });
                     });
                     
                     describe("when it wasn't 0x47", [&]{
-                        it("should throw a invalid_sync_byte_exception, on top of that, not push the packet to this container", [&]{
-                            push_test<payload_builder::invalid_sync_byte_exception>()(builder, _INVALID_PACKET, true);
-                        });
-                    });
-                });
-                
-                describe("a PID of the packet", [&]{
-                    describe("when not emptied this container" ,[&]{
-                        describe("when pushed the packet of a different PID", [&]{
-                            it("should throw a invalid_pid_exeption, on top of that, not push the packet to this container", [&]{
-                                builder->push(_DIFFERENT_PID_PACKET);
-                                push_test<payload_builder::invalid_pid_exeption>()(builder, _MULTI_PACKET_2, true);
+                        it("should contain a status of the INVALID_SYNC_BYTE into the status_set, on top of that, not push the packet to this container", [&]{
+                            _assert(_INVALID_PACKET, {
+                                payload_builder::status::INVALID,
+                                payload_builder::status::INVALID_SYNC_BYTE
                             });
                         });
                     });
                 });
                 
-                describe("a payload_unit_start_indicator of the packet", [&]{
+                describe("in case of the PID", [&]{
+                    describe("when not emptied this container" ,[&]{
+                        describe("when pushed the packet of a different PID", [&]{
+                            it("should contain a status of the INVALID_PID into the status_set, on top of that, not push the packet to this container", [&]{
+                                _assert(_DIFFERENT_PID_PACKET, {
+                                    payload_builder::status::PUSHED,
+                                    payload_builder::status::COMPLETED
+                                });
+                                _assert(_MULTI_PACKET_2, {
+                                    payload_builder::status::COMPLETED,
+                                    payload_builder::status::INVALID,
+                                    payload_builder::status::INVALID_PID
+                                });
+                            });
+                        });
+                    });
+                });
+                
+                describe("in case of the payload_unit_start_indicator", [&]{
                     describe("when emptied this container", [&]{
                         describe("when it was 1", [&]{
                             it("should push the packet to this container", [&]{
-                                push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_1, false);
+                                _assert(_MULTI_PACKET_1, {payload_builder::status::PUSHED});
                             });
                         });
                         
                         describe("when it was 0", [&]{
-                            it("should throw a invalid_payload_unit_start_indicator_exception, on top of that, not push the packet to this container", [&]{
-                                push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_2, true);
+                            it("should contain a status of the INVALID_PAYLOAD_UNIT_START_INDICATOR into the status_set, on top of that, not push the packet to this container", [&]{
+                                _assert(_MULTI_PACKET_2, {
+                                    payload_builder::status::INVALID,
+                                    payload_builder::status::INVALID_PAYLOAD_UNIT_START_INDICATOR
+                                });
                             });
                         });
                     });
                     
                     describe("when not emptied this container", [&]{
                         describe("when it was 1", [&]{
-                            it("should throw a invalid_payload_unit_start_indicator_exception, on top of that, not push the packet to this container", [&]{
-                                builder->push(_MULTI_PACKET_1);
-                                push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_1, true);
+                            it("should contain a status of the INVALID_PAYLOAD_UNIT_START_INDICATOR into the status_set, on top of that, not push the packet to this container", [&]{
+                                _assert(_MULTI_PACKET_1, {payload_builder::status::PUSHED});
+                                _assert(_MULTI_PACKET_1, {
+                                    payload_builder::status::INVALID,
+                                    payload_builder::status::INVALID_PAYLOAD_UNIT_START_INDICATOR
+                                });
                             });
                         });
                         
                         describe("when it was 0", [&]{
                             it("should push the packet to this container", [&]{
-                                builder->push(_MULTI_PACKET_1);
-                                push_test<payload_builder::invalid_payload_unit_start_indicator_exception>()(builder, _MULTI_PACKET_2, false);
+                                _assert(_MULTI_PACKET_1, {payload_builder::status::PUSHED});
+                                _assert(_MULTI_PACKET_2, {payload_builder::status::PUSHED, payload_builder::status::COMPLETED});
                             });
                         });
                      });

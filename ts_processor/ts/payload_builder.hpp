@@ -5,6 +5,7 @@
 #include <bitfield/container/vector.hpp>
 #include <string>
 #include <exception>
+#include <bitset>
 
 namespace ts_processor { namespace ts {
     class payload_builder {
@@ -14,21 +15,21 @@ namespace ts_processor { namespace ts {
         int32_t length;
         
     public:
-        struct invalid_sync_byte_exception: public std::invalid_argument {
-            invalid_sync_byte_exception(const std::string & m) : std::invalid_argument(m) {}
+        enum status {
+            PUSHED,
+            COMPLETED,
+            INVALID,
+            INVALID_SYNC_BYTE,
+            INVALID_PID,
+            INVALID_PAYLOAD_UNIT_START_INDICATOR,
+            
+            SIZE
         };
+        using status_set = std::bitset<status::SIZE>;
         
-        struct invalid_pid_exeption: public std::invalid_argument {
-            invalid_pid_exeption(const std::string & m) : std::invalid_argument(m) {}
-        };
+        payload_builder(int32_t pid = -1) : pid(pid), n(0) {}
         
-        struct invalid_payload_unit_start_indicator_exception: public std::invalid_argument {
-            invalid_payload_unit_start_indicator_exception(const std::string & m) : std::invalid_argument(m) {}
-        };
-        
-        payload_builder() : pid(-1), n(0) {}
-        
-        bool push(const ts::packet & packet);
+        status_set push(const ts::packet & packet);
         const ts::payload * payload() const;
         std::size_t size() const;
         int32_t current_pid() const;

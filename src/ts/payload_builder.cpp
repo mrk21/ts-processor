@@ -1,37 +1,49 @@
 #include <ts_processor/ts/payload_builder.hpp>
 
 namespace ts_processor { namespace ts {
-    bool payload_builder::push(const ts::packet & packet) {
+    payload_builder::status_set payload_builder::push(const ts::packet & packet) {
+        status_set result;
+        
         if (packet.sync_byte != 0x47) {
-            throw invalid_sync_byte_exception("A sync byte of the packet isn't 0x47!");
+            result.set(status::INVALID);
+            result.set(status::INVALID_SYNC_BYTE);
+            return result;
         }
         
         if (this->empty()) {
             if (packet.payload_unit_start_indicator == 0) {
-                throw invalid_payload_unit_start_indicator_exception("A payload unit start indicator of the packet is 0!");
+                result.set(status::INVALID);
+                result.set(status::INVALID_PAYLOAD_UNIT_START_INDICATOR);
             }
-            
-            this->pid = packet.pid;
-            this->length = packet.payload->length();
+            else {
+                if (this->pid == -1) this->pid = packet.pid;
+                this->length = packet.payload->length();
+            }
         }
         else {
             if (packet.pid != this->pid) {
-                throw invalid_pid_exeption("A PID of the packet is difference!");
+                result.set(status::INVALID);
+                result.set(status::INVALID_PID);
             }
-            
             if (packet.payload_unit_start_indicator == 1) {
-                throw invalid_payload_unit_start_indicator_exception("A payload unit start indicator of the packet is 1!");
+                result.set(status::INVALID);
+                result.set(status::INVALID_PAYLOAD_UNIT_START_INDICATOR);
             }
-            
-            if (this->length <= 0) return true;
+            if (this->length <= 0) {
+                result.set(status::COMPLETED);
+            }
         }
         
-        for (auto v: packet.payload) this->container.push_back(v);
+        if (result.count() == 0) {
+            for (auto v: packet.payload) this->container.push_back(v);
+            this->length -= packet.payload.length();
+            ++this->n;
+            
+            result.set(status::PUSHED);
+            if (this->length <= 0) result.set(status::COMPLETED);
+        }
         
-        ++this->n;
-        this->length -= packet.payload.length();
-        
-        return this->length <= 0;
+        return result;
     }
     
     const ts::payload * payload_builder::payload() const {
