@@ -7,28 +7,55 @@ go_bandit([]{
     using namespace bandit;
     
     describe("ts::payload", [&]{
-        describe("#length()", [&]{
-            describe("when a packet type was the PES", [&]{
+        ts::packet const _PES{
+            #include <fixture/ts/pes/minimum.cpp>
+        };
+        ts::packet const _PSI{
+            #include <fixture/ts/psi/pat/single_packet.cpp>
+        };
+        
+        describe("#data_type()", [&]{
+            describe("when a type of the packet was the PES", [&]{
+                it("should be type::pes", [&]{
+                    AssertThat(_PES.payload->data_type(), Equals(payload::type::pes));
+                });
+            });
+            
+            describe("when a type of the packet was the PSI", [&]{
+                it("should be type::psi", [&]{
+                    AssertThat(_PSI.payload->data_type(), Equals(payload::type::psi));
+                });
+            });
+        });
+        
+        describe("#data_offset()", [&]{
+            describe("when a type of the packet was the PES", [&]{
+                it("should be 0", [&]{
+                    AssertThat(_PES.payload->data_offset(), Equals(0));
+                });
+            });
+            
+            describe("when a type of the packet was the PSI", [&]{
+                it("should be `sizeof(pointer_field) + pointer_field`", [&]{
+                    AssertThat(_PSI.payload->data_offset(),
+                        Equals(sizeof(payload::pointer_field_type) + _PSI.payload->pointer_field));
+                });
+            });
+        });
+        
+        describe("#data_length()", [&]{
+            describe("when a type of the packet was the PES", [&]{
                 it("should be a length of the PES", [&]{
-                    ts::packet packet{
-                        #include <fixture/ts/pes/minimum.cpp>
-                    };
-                    AssertThat(packet.payload->length(), Equals(
-                        packet.payload->pes.pes_packet_length +
-                        bitfield::bit_type(pes::base::pes_packet_length_type::NEXT_OFFSET).byte()
+                    AssertThat(_PES.payload->data_length(), Equals(
+                        _PES.payload->pes.pes_packet_length + sizeof(pes::base)
                     ));
                 });
             });
             
-            describe("when a packet type was the PSI", [&]{
+            describe("when a type of the packet was the PSI", [&]{
                 it("should be a length of the PSI", [&]{
-                    ts::packet packet{
-                        #include <fixture/ts/psi/pat/single_packet.cpp>
-                    };
-                    AssertThat(packet.payload->length(), Equals(
-                        packet.payload->psi.section_length +
-                        sizeof(uint8_t) + 
-                        bitfield::bit_type(psi::base::section_length_type::NEXT_OFFSET).byte()
+                    AssertThat(_PSI.payload->data_length(), Equals(
+                        _PSI.payload->psi->section_length + sizeof(psi::base)
                     ));
                 });
             });

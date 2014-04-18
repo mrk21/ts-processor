@@ -1,5 +1,5 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
-#include <ts_processor/ts/packet.hpp>
+#include <ts_processor/ts/data.hpp>
 #include <ts_processor/ts/psi/pmt.hpp>
 #include <bitfield/iostream.hpp>
 
@@ -8,17 +8,19 @@ go_bandit([]{
     using namespace bandit;
     
     describe("ts::psi::pmt", [&]{
-        ts::packet packet;
+        ts::data data;
         
         before_each([&]{
-            packet = {
+            ts::packet packet{
                 #include <fixture/ts/psi/pmt/single_packet.cpp>
             };
+            data.reset(packet.pid);
+            data.push(packet);
         });
         
         describe("#sections", [&]{
             it("should iterate each fieldset in the section list", [&]{
-                auto & sections = packet.payload->pmt.sections;
+                auto & sections = data->pmt.sections;
                 auto it = sections.begin();
                 auto end = sections.end();
                 

@@ -2,29 +2,32 @@
 #define __INCLUDED_TS_PROCESSOR_TS_PAYLOAD__
 
 #include <ts_processor/ts/psi/base.hpp>
-#include <ts_processor/ts/psi/pat.hpp>
-#include <ts_processor/ts/psi/pmt.hpp>
 #include <ts_processor/ts/pes/base.hpp>
 #include <bitfield/field.hpp>
+#include <bitfield/section/base.hpp>
 
 namespace ts_processor { namespace ts {
     union payload {
-        // PSI/SI
-        // memo: The value of the pointer_field is assumed that it is always 0x00.
-        struct {
-            uint8_t pointer_field; // 0x00
-            union {
-                psi::base psi;
-                psi::pat pat;
-                psi::pmt pmt;
-            };
+        using pointer_field_type = uint8_t;
+        
+        struct psi_section_type: public bitfield::section::base<psi_section_type, psi::base, payload> {
+            const uint8_t * base_addr() const;
+            std::size_t length() const;
         };
         
+        enum class type: uint8_t {
+            none,
+            psi,
+            pes,
+        };
+        
+        pointer_field_type pointer_field;
+        psi_section_type psi;
         pes::base pes;
         
-        std::size_t length() const;
-        
-        // futures: The definition of the payload.
+        std::size_t data_length() const;
+        std::ptrdiff_t data_offset() const;
+        type data_type() const;
     };
 }}
 
