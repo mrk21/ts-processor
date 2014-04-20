@@ -10,11 +10,11 @@ namespace ts_processor { namespace ts {
         for (auto & record: self::database()) {
             switch (record.range.size()) {
             case 1:
-                self::tags.insert({record.range[0], record.info.tag});
+                self::tags[record.range[0]] = record.info.tag;
                 
             case 2:
                 for (uint16_t id = record.range[0]; id <= record.range[1]; ++id) {
-                    self::tags.insert({id, record.info.tag});
+                    self::tags[id] = record.info.tag;
                 }
             }
         }
@@ -22,8 +22,8 @@ namespace ts_processor { namespace ts {
         return initialized = true;
     }
     
-    stream_type::tag stream_type::tag_of(uint8_t type) {
-        return self::tags.at(type);
+    stream_type::tag stream_type::tag_of(uint32_t id) {
+        return self::tags.at(id);
     }
     
     namespace {

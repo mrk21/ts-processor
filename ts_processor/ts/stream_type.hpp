@@ -61,7 +61,7 @@ namespace ts_processor { namespace ts {
         
     public:
         static bool initialize();
-        static tag tag_of(uint8_t type);
+        static tag tag_of(uint32_t id);
     };
 }}
 
