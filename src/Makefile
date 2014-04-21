@@ -1,7 +1,7 @@
 include ../common.mk
 
-MAIN = tssplitter
-LIB_SRC = $(basename $(shell find ${ROOT_DIR}/src -name '*.cpp' $(addprefix -not -name , $(addsuffix .cpp, ${MAIN}))))
+MAIN = $(basename $(wildcard *.cpp))
+LIB_SRC = $(basename $(shell find ${ROOT_DIR}/src/ts_processor -name '*.cpp'))
 SRC = ${MAIN} ${LIB_SRC}
 
 .PHONY: all
@@ -20,7 +20,7 @@ rebuild: clean all
 ${LIB}: $(addsuffix .o, ${LIB_SRC})
 	${AR} r $@ $^
 
-${MAIN}: $(addsuffix .o, ${SRC}) ${LIB}
-	${CXX} ${LDFLAGS} -o $@ $<
+${MAIN}: $(addsuffix .o, ${MAIN}) ${LIB}
+	${CXX} ${LDFLAGS} -o $@ $@.o
 
 -include $(addsuffix .d, ${SRC})
