@@ -3,11 +3,6 @@
 #include <iostream>
 
 namespace ts_processor { namespace ts {
-    std::ostream & operator <<(std::ostream & out, stream_type::type type) {
-        out << static_cast<uint32_t>(type);
-        return out;
-    }
-    
 go_bandit([]{
     using namespace bandit;
     

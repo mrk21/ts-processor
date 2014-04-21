@@ -1,6 +1,7 @@
 #ifndef __INCLUDED_TS_PROCESSOR_TS_STREAM_TYPE_HPP__
 #define __INCLUDED_TS_PROCESSOR_TS_STREAM_TYPE_HPP__
 
+#include <ts_processor/symbolset.hpp>
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -11,14 +12,14 @@ namespace ts_processor { namespace ts {
         using self = stream_type;
         
     public:
-        enum class type: uint8_t {
+        TS_PROCESSOR_SYMBOLSET(type,
             reserved,
             video,
             audio,
             user,
             other,
             invalid,
-        };
+        )
         
     private:
         struct database_schema {

@@ -1,6 +1,7 @@
 #ifndef __INCLUDED_TS_PROCESSOR_TS_PID_HPP__
 #define __INCLUDED_TS_PROCESSOR_TS_PID_HPP__
 
+#include <ts_processor/symbolset.hpp>
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -11,7 +12,7 @@ namespace ts_processor { namespace ts {
         using self = pid;
         
     public:
-        enum class type: uint8_t {
+        TS_PROCESSOR_SYMBOLSET(type,
             reserved,
             pat,
             cat,
@@ -19,7 +20,7 @@ namespace ts_processor { namespace ts {
             mapped,
             null,
             invalid,
-        };
+        )
         
         enum id: uint16_t {
             pat  = 0x0000,
