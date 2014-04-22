@@ -1,5 +1,13 @@
 #include <ts_processor/ts/psi/pat.hpp>
 
+// pat::section_type
+namespace ts_processor { namespace ts { namespace psi {
+    pat::pid_type pat::section_type::type() const {
+        return this->program_number == 0x0000 ? pat::pid_type::nit
+                                              : pat::pid_type::pmt;
+    }
+}}}
+
 // pat::section_list_type
 namespace ts_processor { namespace ts { namespace psi {
     namespace {

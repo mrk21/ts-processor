@@ -25,22 +25,27 @@ go_bandit([]{
                 auto end = sections.end();
                 
                 AssertThat(it, not Equals(end));
+                AssertThat(it->type(), Equals(pat::pid_type::nit));
                 AssertThat(it->pid, Equals(0x0010));
                 
                 ++it;
                 AssertThat(it, not Equals(end));
+                AssertThat(it->type(), Equals(pat::pid_type::pmt));
                 AssertThat(it->pid, Equals(0x0101));
                 
                 ++it;
                 AssertThat(it, not Equals(end));
+                AssertThat(it->type(), Equals(pat::pid_type::pmt));
                 AssertThat(it->pid, Equals(0x0102));
                 
                 ++it;
                 AssertThat(it, not Equals(end));
+                AssertThat(it->type(), Equals(pat::pid_type::pmt));
                 AssertThat(it->pid, Equals(0x1FC8));
                 
                 ++it;
                 AssertThat(it, not Equals(end));
+                AssertThat(it->type(), Equals(pat::pid_type::pmt));
                 AssertThat(it->pid, Equals(0x1FC9));
                 
                 ++it;

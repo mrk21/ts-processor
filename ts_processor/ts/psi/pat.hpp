@@ -1,6 +1,7 @@
 #ifndef __INCLUDED_TS_PROCESSOR_TS_PSI_PAT_HPP__
 #define __INCLUDED_TS_PROCESSOR_TS_PSI_PAT_HPP__
 
+#include <ts_processor/symbolset.hpp>
 #include <bitfield/field.hpp>
 #include <bitfield/section/list.hpp>
 #include <cstddef>
@@ -20,6 +21,11 @@ namespace ts_processor { namespace ts { namespace psi {
         using section_number_type           =   current_next_indicator_type::next_field< 8>;
         using last_section_number_type      =           section_number_type::next_field< 8>;
         
+        TS_PROCESSOR_SYMBOLSET(pid_type,
+            nit,
+            pmt,
+        )
+        
         union section_type {
             using program_number_type =                 bitfield::field<16>;
             using reserved_type       = program_number_type::next_field< 3>;
@@ -30,6 +36,7 @@ namespace ts_processor { namespace ts { namespace psi {
             pid_type             pid;
             
             constexpr std::size_t length() const { return sizeof(pid_type::container_type); }
+            pat::pid_type type() const;
         };
         
         struct section_list_type: public bitfield::section::list<section_list_type, section_type, pat> {
