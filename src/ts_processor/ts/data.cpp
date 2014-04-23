@@ -45,6 +45,11 @@ namespace ts_processor { namespace ts {
             return states;
         }
         
+        if (packet.pid != this->pid_) {
+            states.set(push_state::invalid);
+            states.set(push_state::invalid_pid);
+        }
+        
         if (this->container.empty()) {
             if (packet.payload_unit_start_indicator == 0) {
                 states.set(push_state::invalid);
@@ -52,10 +57,6 @@ namespace ts_processor { namespace ts {
             }
         }
         else {
-            if (packet.pid != this->pid_) {
-                states.set(push_state::invalid);
-                states.set(push_state::invalid_pid);
-            }
             if (packet.payload_unit_start_indicator == 1) {
                 states.set(push_state::invalid);
                 states.set(push_state::invalid_payload_unit_start_indicator);

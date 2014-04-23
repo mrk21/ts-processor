@@ -108,6 +108,17 @@ go_bandit([]{
                                     data::push_state::invalid_pid
                                 });
                             });
+                            
+                            describe("when emptied this container", [&]{
+                                it("should contain a state of the invalid_pid into the state_set, on top of that, not push the packet to this container", [&]{
+                                    _init(0);
+                                    
+                                    _assert(_MULTI_PACKET_1, {
+                                        data::push_state::invalid,
+                                        data::push_state::invalid_pid
+                                    });
+                                });
+                            });
                         });
                     });
                 });
