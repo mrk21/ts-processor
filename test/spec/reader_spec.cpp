@@ -56,7 +56,7 @@ go_bandit([]{
                 assert_packet_(PMT_PACKETS_[0]);
             });
             
-            describe("when the stream reaches the end", [&]{
+            describe("when the stream reached the end", [&]{
                 it("should return false", [&]{
                     init_(PMT_PACKETS_);
                     assert_packet_(PMT_PACKETS_[0]);
