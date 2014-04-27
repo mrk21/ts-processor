@@ -12,23 +12,23 @@ namespace ts_processor { namespace ts {
         auto begin = payload.begin();
         auto end = payload.end();
         
-        if (this->container.empty()) {
+        if (this->container_.empty()) {
             this->data_length = payload->data_length();
             this->data_type_ = payload->data_type();
             begin += payload->data_offset();
         }
         
-        std::size_t remainder_length = this->data_length - this->container.size();
+        std::size_t remainder_length = this->data_length - this->container_.size();
         std::size_t payload_length = end - begin;
         
         if (remainder_length < payload_length) {
             end = begin + remainder_length;
         }
         
-        std::copy(begin, end, std::back_insert_iterator<decltype(this->container)>(this->container));
+        std::copy(begin, end, std::back_insert_iterator<decltype(this->container_)>(this->container_));
         states.set(push_state::pushed);
         
-        if (this->container.size() == this->data_length) {
+        if (this->container_.size() == this->data_length) {
             states.set(push_state::ready);
             this->is_ready_ = true;
         }
@@ -50,7 +50,7 @@ namespace ts_processor { namespace ts {
             states.set(push_state::invalid_pid);
         }
         
-        if (this->container.empty()) {
+        if (this->container_.empty()) {
             if (packet.payload_unit_start_indicator == 0) {
                 states.set(push_state::invalid);
                 states.set(push_state::invalid_payload_unit_start_indicator);
@@ -61,7 +61,7 @@ namespace ts_processor { namespace ts {
                 states.set(push_state::invalid);
                 states.set(push_state::invalid_payload_unit_start_indicator);
             }
-            if (this->container.size() == this->data_length) {
+            if (this->container_.size() == this->data_length) {
                 states.set(push_state::ready);
             }
         }
@@ -70,7 +70,7 @@ namespace ts_processor { namespace ts {
     }
     
     void data::reset(uint32_t pid) {
-        this->container.clear();
+        this->container_.clear();
         this->pid_ = pid;
         this->data_length = 0;
         this->data_type_ = type::none;
@@ -79,7 +79,7 @@ namespace ts_processor { namespace ts {
     
     
     std::size_t data::length() const {
-        return this->container.size();
+        return this->container_.size();
     }
     
     uint32_t data::pid() const {
@@ -95,15 +95,19 @@ namespace ts_processor { namespace ts {
     }
     
     
+    data::fieldset_type * data::fieldset() {
+        return const_cast<fieldset_type *>(const_cast<const data *>(this)->fieldset());
+    }
+    data::fieldset_type * data::operator ->() { return  this->fieldset(); }
+    data::fieldset_type & data::operator  *() { return *this->fieldset(); }
+    
     const data::fieldset_type * data::fieldset() const {
-        return this->is_ready() ? (const fieldset_type *)&this->container[0] : nullptr;
+        return this->is_ready() ? (const fieldset_type *)&this->container_[0] : nullptr;
     }
+    const data::fieldset_type * data::operator ->() const { return  this->fieldset(); }
+    const data::fieldset_type & data::operator  *() const { return *this->fieldset(); }
     
-    const data::fieldset_type * data::operator ->() const {
-        return this->fieldset();
-    }
-    
-    const data::fieldset_type & data::operator *() const {
-        return *this->fieldset();
+    const data::container_type & data::container() const {
+        return this->container_;
     }
 }}

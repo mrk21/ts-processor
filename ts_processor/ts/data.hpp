@@ -28,10 +28,12 @@ namespace ts_processor { namespace ts {
             
             SIZE
         };
+        
         using push_states = std::bitset<push_state::SIZE>;
+        using container_type = bitfield::container::vector;
         
     private:
-        bitfield::container::vector container;
+        container_type container_;
         uint32_t pid_;
         std::size_t data_length;
         type data_type_;
@@ -48,9 +50,15 @@ namespace ts_processor { namespace ts {
         type data_type() const;
         bool is_ready() const;
         
+        fieldset_type * fieldset();
+        fieldset_type * operator ->();
+        fieldset_type & operator *();
+        
         const fieldset_type * fieldset() const;
         const fieldset_type * operator ->() const;
         const fieldset_type & operator *() const;
+        
+        const container_type & container() const;
         
     private:
         push_states validate(const ts::packet & packet);
