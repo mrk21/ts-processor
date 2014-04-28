@@ -6,6 +6,7 @@
 #include <bitfield/field.hpp>
 #include <bitfield/container/initializer_list.hpp>
 #include <bitfield/section/base.hpp>
+#include <iostream>
 
 namespace ts_processor { namespace ts {
     // see: ISO/IEC 13818-1, 2.4.3.2, Table 2-2
@@ -51,7 +52,14 @@ namespace ts_processor { namespace ts {
         packet() = default;
         packet(bitfield::container::initializer_list list);
         packet & operator =(bitfield::container::initializer_list list);
+        
+        packet(const ts::packet & packet);
+        packet & operator =(const ts::packet & packet);
     };
+    
+    bool operator ==(const ts::packet & rop, const ts::packet & lop);
+    bool operator !=(const ts::packet & rop, const ts::packet & lop);
+    std::ostream & operator <<(std::ostream & os, const ts::packet & packet);
 }}
 
 #endif // __INCLUDED_TS_PROCESSOR_TS_PACKET_HPP__
