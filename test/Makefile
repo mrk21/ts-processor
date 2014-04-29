@@ -19,7 +19,9 @@ SRC = ${TARGET} $(basename $(shell find spec -name '*_spec.cpp'))
 
 .PHONY: all
 all: lib ${TARGET}
-	./$(word 2, $^) ${args}
+	$(RM) -r tmp
+	mkdir tmp
+	./$(word 2, $^) --reporter=spec ${args}
 
 .PHONY: lib
 lib:
