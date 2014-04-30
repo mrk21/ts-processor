@@ -14,11 +14,13 @@ namespace ts_processor { namespace ts {
             switch (record.id.size()) {
             case 1:
                 self::types[record.id[0]] = record.info.type;
+                break;
                 
             case 2:
                 for (uint16_t id = record.id[0]; id <= record.id[1]; ++id) {
                     self::types[id] = record.info.type;
                 }
+                break;
             }
         }
         
