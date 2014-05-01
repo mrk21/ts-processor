@@ -1,0 +1,47 @@
+BITFIELD_VERSION = 'ts_processor_extension'
+BANDIT_VERSION = 'v1.1.4'
+BANDIT_WITH_GMOCK_VERSION = 'v1.1.1'
+GOOGLEMOCK_VERSION = '1.7.0'
+
+PRODUCT = ['bitfield']
+DEVELOP = ['bandit','bandit_with_gmock','googlemock']
+ALL = PRODUCT + DEVELOP
+
+
+task :default => ALL
+
+desc 'Install the package which required to the product code.'
+task :product => PRODUCT
+
+desc 'Install the package which required to the development.'
+task :develop => ALL
+
+
+directory 'bitfield' do |t|
+  sh "git clone https://github.com/mrk21/bitfield.git #{t.name}"
+  Dir.chdir(t.name) do
+    sh "git checkout #{BITFIELD_VERSION}"
+  end
+end
+
+directory 'bandit' do |t|
+  sh "git clone https://github.com/joakimkarlsson/bandit.git #{t.name}"
+  Dir.chdir(t.name) do
+    sh "git checkout #{BANDIT_VERSION}"
+  end
+end
+
+directory 'bandit_with_gmock' do |t|
+  sh "git clone https://github.com/mrk21/bandit_with_gmock.git #{t.name}"
+  Dir.chdir(t.name) do
+    sh "git checkout #{BANDIT_WITH_GMOCK_VERSION}"
+  end
+end
+
+directory 'googlemock' do |t|
+  sh "svn checkout http://googlemock.googlecode.com/svn/tags/release-#{GOOGLEMOCK_VERSION} #{t.name}"
+  Dir.chdir(t.name) do
+    sh "cmake ."
+    sh "make"
+  end
+end
