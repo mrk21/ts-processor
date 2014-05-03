@@ -108,7 +108,7 @@ namespace ts_processor {
             this->ofs.rdbuf()->pubsetbuf(this->obuf.get(), BUFSIZE);
         }
         
-        int execute(int argc, char * argv[]);
+        int execute(int /*argc*/, char * argv[]);
         
     private:
         void on_elementary_pid_change();

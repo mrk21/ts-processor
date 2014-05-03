@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 project(ts-processor)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
+if(NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  message(FATAL_ERROR "Support the Clang only!")
+endif()
+
+set(CMAKE_CXX_FLAGS "-std=gnu++1y -stdlib=libc++ -Wall -Wextra -Wno-sign-compare")
 set(LIB_NAME ts_processor)
 
 include_directories(${PROJECT_SOURCE_DIR})

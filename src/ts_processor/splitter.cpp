@@ -22,7 +22,7 @@ namespace ts_processor {
         }
     }
     
-    int splitter::execute(int argc, char * argv[]) {
+    int splitter::execute(int, char * argv[]) {
         this->ifs.open(argv[1], std::ios::binary);
         if (!this->ifs) {
             std::cerr << "invalid input file!" << std::endl;
