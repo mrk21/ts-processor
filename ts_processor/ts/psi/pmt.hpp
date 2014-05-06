@@ -2,6 +2,7 @@
 #define __INCLUDED_TS_PROCESSOR_TS_PSI_PMT_HPP__
 
 #include <ts_processor/ts/psi/base.hpp>
+#include <ts_processor/ts/descriptor/base.hpp>
 #include <bitfield/field.hpp>
 #include <bitfield/section/list.hpp>
 #include <cstddef>
@@ -22,6 +23,11 @@ namespace ts_processor { namespace ts { namespace psi {
         using reserved4_type              =                pcr_pid_type::next_field< 4>;
         using program_info_length_type    =              reserved4_type::next_field<12>;
         
+        struct program_info_list_type: public bitfield::section::list<program_info_list_type, descriptor::base, pmt> {
+            const uint8_t * base_addr() const;
+            std::size_t length() const;
+        };
+        
         union section_type {
             using stream_type_type    =                 bitfield::field< 8>;
             using reserved1_type      =    stream_type_type::next_field< 3>;
@@ -29,15 +35,20 @@ namespace ts_processor { namespace ts { namespace psi {
             using reserved2_type      = elementary_pid_type::next_field< 4>;
             using es_info_length_type =      reserved2_type::next_field<12>;
             
-            stream_type_type     stream_type;
-            reserved1_type       reserved1;
-            elementary_pid_type  elementary_pid;
-            reserved2_type       reserved2;
-            es_info_length_type  es_info_length;
+            struct es_info_list_type: public bitfield::section::list<es_info_list_type, descriptor::base, section_type> {
+                const uint8_t * base_addr() const;
+                std::size_t length() const;
+            };
+            
+            stream_type_type    stream_type;
+            reserved1_type      reserved1;
+            elementary_pid_type elementary_pid;
+            reserved2_type      reserved2;
+            es_info_length_type es_info_length;
+            
+            es_info_list_type es_info;
             
             std::size_t length() const;
-            
-            // futures: The definition of the descriptor.
         };
         
         struct section_list_type: public bitfield::section::list<section_list_type, section_type, pmt> {
@@ -46,21 +57,20 @@ namespace ts_processor { namespace ts { namespace psi {
         };
         
         union {
-            program_number_type            program_number;
-            reserved2_type                 reserved2;
-            version_number_type            version_number;
-            current_next_indicator_type    current_next_indicator;
-            section_number_type            section_number;
-            last_section_number_type       last_section_number;
-            reserved3_type                 reserved3;
-            pcr_pid_type                   pcr_pid;
-            reserved4_type                 reserved4;
-            program_info_length_type       program_info_length;
+            program_number_type         program_number;
+            reserved2_type              reserved2;
+            version_number_type         version_number;
+            current_next_indicator_type current_next_indicator;
+            section_number_type         section_number;
+            last_section_number_type    last_section_number;
+            reserved3_type              reserved3;
+            pcr_pid_type                pcr_pid;
+            reserved4_type              reserved4;
+            program_info_length_type    program_info_length;
             
-            section_list_type  sections;
+            program_info_list_type program_info;
+            section_list_type sections;
         };
-        
-        // futures: The definition of the descriptor.
     };
 }}}
 

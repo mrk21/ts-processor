@@ -1,6 +1,17 @@
 #include <ts_processor/ts/psi/pmt.hpp>
 #include <bitfield/byte_type.hpp>
 
+// pmt::program_info_list_type
+namespace ts_processor { namespace ts { namespace psi {
+    const uint8_t * pmt::program_info_list_type::base_addr() const {
+        return bitfield::bit_type(program_info_length_type::NEXT_OFFSET).addr(this);
+    }
+    
+    std::size_t pmt::program_info_list_type::length() const {
+        return this->parent()->program_info_length;
+    }
+}}}
+
 // pmt::section_type
 namespace ts_processor { namespace ts { namespace psi {
     std::size_t pmt::section_type::length() const {
@@ -8,6 +19,17 @@ namespace ts_processor { namespace ts { namespace psi {
             bitfield::bit_type(es_info_length_type::NEXT_OFFSET).byte();
         
         return _OFFSET + this->es_info_length;
+    }
+}}}
+
+// pmt::section_type::es_info_list_type
+namespace ts_processor { namespace ts { namespace psi {
+    const uint8_t * pmt::section_type::es_info_list_type::base_addr() const {
+        return bitfield::bit_type(es_info_length_type::NEXT_OFFSET).addr(this);
+    }
+    
+    std::size_t pmt::section_type::es_info_list_type::length() const {
+        return this->parent()->es_info_length;
     }
 }}}
 

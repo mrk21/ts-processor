@@ -18,6 +18,28 @@ go_bandit([]{
             data.push(packet);
         });
         
+        describe("#program_info", [&]{
+            it("should iterate each descriptor in this list", [&]{
+                auto & program_info = data->pmt.program_info;
+                auto it = program_info.begin();
+                auto end = program_info.end();
+                
+                AssertThat(it, not Equals(end));
+                AssertThat(it->type(), Equals(descriptor_tag::type::ca));
+                
+                ++it;
+                AssertThat(it, not Equals(end));
+                AssertThat(it->type(), Equals(descriptor_tag::type::reserved));
+                
+                ++it;
+                AssertThat(it, not Equals(end));
+                AssertThat(it->type(), Equals(descriptor_tag::type::user_private));
+                
+                ++it;
+                AssertThat(it, Equals(end));
+             });
+        });
+        
         describe("#sections", [&]{
             it("should iterate each fieldset in the section list", [&]{
                 auto & sections = data->pmt.sections;
@@ -26,14 +48,48 @@ go_bandit([]{
                 
                 AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0111));
+                {
+                    auto jt = it->es_info.begin();
+                    auto jend = it->es_info.end();
+                    
+                    AssertThat(jt, not Equals(jend));
+                    AssertThat(jt->type(), Equals(descriptor_tag::type::user_private));
+                    
+                    ++jt;
+                    AssertThat(jt, Equals(jend));
+                }
                 
                 ++it;
                 AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0112));
+                {
+                    auto jt = it->es_info.begin();
+                    auto jend = it->es_info.end();
+                    
+                    AssertThat(jt, not Equals(jend));
+                    AssertThat(jt->type(), Equals(descriptor_tag::type::user_private));
+                    
+                    ++jt;
+                    AssertThat(jt, Equals(jend));
+                }
                 
                 ++it;
                 AssertThat(it, not Equals(end));
                 AssertThat(it->elementary_pid, Equals(0x0114));
+                {
+                    auto jt = it->es_info.begin();
+                    auto jend = it->es_info.end();
+                    
+                    AssertThat(jt, not Equals(jend));
+                    AssertThat(jt->type(), Equals(descriptor_tag::type::user_private));
+                    
+                    ++jt;
+                    AssertThat(jt, not Equals(jend));
+                    AssertThat(jt->type(), Equals(descriptor_tag::type::user_private));
+                    
+                    ++jt;
+                    AssertThat(jt, Equals(jend));
+                }
                 
                 ++it;
                 AssertThat(it, not Equals(end));
