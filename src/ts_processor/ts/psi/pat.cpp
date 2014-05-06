@@ -20,8 +20,7 @@ namespace ts_processor { namespace ts { namespace psi {
     }
     
     std::size_t pat::section_list_type::length() const {
-        static constexpr uint32_t _DIFF =
-            _SECTIONS_OFFSET.diff(section_length_type::NEXT_OFFSET).add(32).byte();
+        static constexpr uint32_t _DIFF = _SECTIONS_OFFSET.add(32).byte();
         
         return this->parent()->section_length - _DIFF;
     }

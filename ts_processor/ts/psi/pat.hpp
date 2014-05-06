@@ -1,6 +1,7 @@
 #ifndef __INCLUDED_TS_PROCESSOR_TS_PSI_PAT_HPP__
 #define __INCLUDED_TS_PROCESSOR_TS_PSI_PAT_HPP__
 
+#include <ts_processor/ts/psi/base.hpp>
 #include <ts_processor/symbolset.hpp>
 #include <bitfield/field.hpp>
 #include <bitfield/section/list.hpp>
@@ -8,18 +9,15 @@
 
 namespace ts_processor { namespace ts { namespace psi {
     // see: ISO/IEC 13818-1, 2.4.4.3, Table 2-25
-    union pat {
-        using table_id_type                 =                           bitfield::field< 8>;
-        using section_syntax_indicator_type =                 table_id_type::next_field< 1>;
-        using _0_type                       = section_syntax_indicator_type::next_field< 1>;
-        using reserved1_type                =                       _0_type::next_field< 2>;
-        using section_length_type           =                reserved1_type::next_field<12>;
-        using transport_stream_id_type      =           section_length_type::next_field<16>;
-        using reserved2_type                =      transport_stream_id_type::next_field< 2>;
-        using version_number_type           =                reserved2_type::next_field< 5>;
-        using current_next_indicator_type   =           version_number_type::next_field< 1>;
-        using section_number_type           =   current_next_indicator_type::next_field< 8>;
-        using last_section_number_type      =           section_number_type::next_field< 8>;
+    struct pat: public base {
+        using base_class = base;
+        
+        using transport_stream_id_type    =                         bitfield::field<16>;
+        using reserved2_type              =    transport_stream_id_type::next_field< 2>;
+        using version_number_type         =              reserved2_type::next_field< 5>;
+        using current_next_indicator_type =         version_number_type::next_field< 1>;
+        using section_number_type         = current_next_indicator_type::next_field< 8>;
+        using last_section_number_type    =         section_number_type::next_field< 8>;
         
         TS_PROCESSOR_SYMBOLSET(pid_type,
             nit,
@@ -44,19 +42,16 @@ namespace ts_processor { namespace ts { namespace psi {
             std::size_t length() const;
         };
         
-        table_id_type                  table_id;
-        section_syntax_indicator_type  section_syntax_indicator;
-        _0_type                        _0;
-        reserved1_type                 reserved1;
-        section_length_type            section_length;
-        transport_stream_id_type       transport_stream_id;
-        reserved2_type                 reserved2;
-        version_number_type            version_number;
-        current_next_indicator_type    current_next_indicator;
-        section_number_type            section_number;
-        last_section_number_type       last_section_number;
-        
-        section_list_type  sections;
+        union {
+            transport_stream_id_type    transport_stream_id;
+            reserved2_type              reserved2;
+            version_number_type         version_number;
+            current_next_indicator_type current_next_indicator;
+            section_number_type         section_number;
+            last_section_number_type    last_section_number;
+            
+            section_list_type sections;
+        };
         
         // futures: The definition of the pat#crc.
     };

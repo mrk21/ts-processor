@@ -27,6 +27,6 @@ namespace ts_processor { namespace ts { namespace psi {
     }
     
     std::size_t pmt::section_list_type::length() const {
-        return this->parent()->section_length - _sections_offset(this).byte() - 1;
+        return this->parent()->section_length - _sections_offset(this).byte() - this->offset_from_parent() - 1;
     }
 }}}
