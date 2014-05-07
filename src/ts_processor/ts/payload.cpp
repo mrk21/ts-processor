@@ -5,9 +5,9 @@ namespace ts_processor { namespace ts {
     std::size_t payload::data_length() const {
         switch (this->data_type()) {
         case type::pes:
-            return sizeof(pes::base) + this->pes.pes_packet_length;
+            return this->pes.length();
         case type::psi:
-            return sizeof(psi::base) + this->psi->section_length;
+            return this->psi->length();
         default:
             return 0;
         }

@@ -52,8 +52,6 @@ namespace ts_processor { namespace ts { namespace psi {
             
             section_list_type sections;
         };
-        
-        // futures: The definition of the pat#crc.
     };
 }}}
 
