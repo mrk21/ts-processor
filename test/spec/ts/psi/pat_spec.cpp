@@ -10,6 +10,10 @@ go_bandit([]{
     describe("ts::psi::pat", [&]{
         ts::data data;
         
+        auto equals_v = [](pat::pid_type v){
+            return Equals(v);
+        };
+        
         before_each([&]{
             ts::packet packet{
                 #include <fixture/ts/psi/pat/single_packet.cpp>
@@ -25,27 +29,27 @@ go_bandit([]{
                 auto end = sections.end();
                 
                 AssertThat(it, not Equals(end));
-                AssertThat(it->type(), Equals(pat::pid_type::nit));
+                AssertThat(it->type(), equals_v(pat::pid_type::nit));
                 AssertThat(it->pid, Equals(0x0010));
                 
                 ++it;
                 AssertThat(it, not Equals(end));
-                AssertThat(it->type(), Equals(pat::pid_type::pmt));
+                AssertThat(it->type(), equals_v(pat::pid_type::pmt));
                 AssertThat(it->pid, Equals(0x0101));
                 
                 ++it;
                 AssertThat(it, not Equals(end));
-                AssertThat(it->type(), Equals(pat::pid_type::pmt));
+                AssertThat(it->type(), equals_v(pat::pid_type::pmt));
                 AssertThat(it->pid, Equals(0x0102));
                 
                 ++it;
                 AssertThat(it, not Equals(end));
-                AssertThat(it->type(), Equals(pat::pid_type::pmt));
+                AssertThat(it->type(), equals_v(pat::pid_type::pmt));
                 AssertThat(it->pid, Equals(0x1FC8));
                 
                 ++it;
                 AssertThat(it, not Equals(end));
-                AssertThat(it->type(), Equals(pat::pid_type::pmt));
+                AssertThat(it->type(), equals_v(pat::pid_type::pmt));
                 AssertThat(it->pid, Equals(0x1FC9));
                 
                 ++it;

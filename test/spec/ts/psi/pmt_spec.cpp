@@ -10,6 +10,10 @@ go_bandit([]{
     describe("ts::psi::pmt", [&]{
         ts::data data;
         
+        auto equals_v = [](descriptor_tag::type v){
+            return Equals(v);
+        };
+        
         before_each([&]{
             ts::packet packet{
                 #include <fixture/ts/psi/pmt/single_packet.cpp>
@@ -25,15 +29,15 @@ go_bandit([]{
                 auto end = program_info.end();
                 
                 AssertThat(it, not Equals(end));
-                AssertThat(it->type(), Equals(descriptor_tag::type::ca));
+                AssertThat(it->type(), equals_v(descriptor_tag::type::ca));
                 
                 ++it;
                 AssertThat(it, not Equals(end));
-                AssertThat(it->type(), Equals(descriptor_tag::type::reserved));
+                AssertThat(it->type(), equals_v(descriptor_tag::type::reserved));
                 
                 ++it;
                 AssertThat(it, not Equals(end));
-                AssertThat(it->type(), Equals(descriptor_tag::type::user_private));
+                AssertThat(it->type(), equals_v(descriptor_tag::type::user_private));
                 
                 ++it;
                 AssertThat(it, Equals(end));
@@ -53,7 +57,7 @@ go_bandit([]{
                     auto jend = it->es_info.end();
                     
                     AssertThat(jt, not Equals(jend));
-                    AssertThat(jt->type(), Equals(descriptor_tag::type::user_private));
+                    AssertThat(jt->type(), equals_v(descriptor_tag::type::user_private));
                     
                     ++jt;
                     AssertThat(jt, Equals(jend));
@@ -67,7 +71,7 @@ go_bandit([]{
                     auto jend = it->es_info.end();
                     
                     AssertThat(jt, not Equals(jend));
-                    AssertThat(jt->type(), Equals(descriptor_tag::type::user_private));
+                    AssertThat(jt->type(), equals_v(descriptor_tag::type::user_private));
                     
                     ++jt;
                     AssertThat(jt, Equals(jend));
@@ -81,11 +85,11 @@ go_bandit([]{
                     auto jend = it->es_info.end();
                     
                     AssertThat(jt, not Equals(jend));
-                    AssertThat(jt->type(), Equals(descriptor_tag::type::user_private));
+                    AssertThat(jt->type(), equals_v(descriptor_tag::type::user_private));
                     
                     ++jt;
                     AssertThat(jt, not Equals(jend));
-                    AssertThat(jt->type(), Equals(descriptor_tag::type::user_private));
+                    AssertThat(jt->type(), equals_v(descriptor_tag::type::user_private));
                     
                     ++jt;
                     AssertThat(jt, Equals(jend));

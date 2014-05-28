@@ -1,7 +1,7 @@
 #ifndef __INCLUDED_TS_PROCESSOR_TS_DESCRIPTOR_TAG_HPP__
 #define __INCLUDED_TS_PROCESSOR_TS_DESCRIPTOR_TAG_HPP__
 
-#include <ts_processor/symbolset.hpp>
+#include <symbolset/symbolset.hpp>
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -12,8 +12,7 @@ namespace ts_processor { namespace ts {
         using self = descriptor_tag;
         
     public:
-        TS_PROCESSOR_SYMBOLSET(type,
-            invalid                     ,
+        SYMBOLSET_DEFINE(type, (
             reserved                    ,
             defined                     ,
             user_private                ,
@@ -43,8 +42,8 @@ namespace ts_processor { namespace ts {
             external_es_id              ,
             muxcode                     ,
             fmxbuffersize               ,
-            multiplexbuffer             ,
-        )
+            multiplexbuffer
+        ))
         
     private:
         struct database_schema {
@@ -57,37 +56,37 @@ namespace ts_processor { namespace ts {
         
         static const std::vector<database_schema> & database() {
             static std::vector<database_schema> const database{
-                {{0     }, {type::reserved                    , "Reserved"                                     }},
-                {{1     }, {type::reserved                    , "Reserved"                                     }},
-                {{2     }, {type::video_stream                , "video_stream_descriptor"                      }},
-                {{3     }, {type::audio_stream                , "audio_stream_descriptor"                      }},
-                {{4     }, {type::hierarchy                   , "hierarchy_descriptor"                         }},
-                {{5     }, {type::registration                , "registration_descriptor"                      }},
-                {{6     }, {type::data_stream_alignment       , "data_stream_alignment_descriptor"             }},
-                {{7     }, {type::target_background_grid      , "target_background_grid_descriptor"            }},
-                {{8     }, {type::video_window                , "Video_window_descriptor"                      }},
-                {{9     }, {type::ca                          , "CA_descriptor"                                }},
-                {{10    }, {type::iso_639_language            , "ISO_639_language_descriptor"                  }},
-                {{11    }, {type::system_clock                , "System_clock_descriptor"                      }},
-                {{12    }, {type::multiplex_buffer_utilization, "Multiplex_buffer_utilization_descriptor"      }},
-                {{13    }, {type::copyright                   , "Copyright_descriptor"                         }},
-                {{14    }, {type::maximum_bitrate             , "Maximum_bitrate_descriptor"                   }},
-                {{15    }, {type::private_data_indicator      , "Private_data_indicator_descriptor"            }},
-                {{16    }, {type::smoothing_buffer            , "Smoothing_buffer_descriptor"                  }},
-                {{17    }, {type::std                         , "STD_descriptor"                               }},
-                {{18    }, {type::ibp                         , "IBP_descriptor"                               }},
-                {{19,26 }, {type::defined                     , "Defined in ISO/IEC 13818-6"                   }},
-                {{27    }, {type::mpeg_4_video                , "MPEG-4_video_descriptor"                      }},
-                {{28    }, {type::mpeg_4_audio                , "MPEG-4_audio_descriptor"                      }},
-                {{29    }, {type::iod                         , "IOD_descriptor"                               }},
-                {{30    }, {type::sl                          , "SL_descriptor"                                }},
-                {{31    }, {type::fmc                         , "FMC_descriptor"                               }},
-                {{32    }, {type::external_es_id              , "External_ES_ID_descriptor"                    }},
-                {{33    }, {type::muxcode                     , "MuxCode_descriptor"                           }},
-                {{34    }, {type::fmxbuffersize               , "FmxBufferSize_descriptor"                     }},
-                {{35    }, {type::multiplexbuffer             , "MultiplexBuffer_descriptor"                   }},
-                {{36,63 }, {type::reserved                    , "ITU-T Rec. H.222.0 | ISO/IEC 13818-1 Reserved"}},
-                {{64,255}, {type::user_private                , "User Private"                                 }},
+                {{0x00     }, {type::reserved                    , "Reserved"                                     }},
+                {{0x01     }, {type::reserved                    , "Reserved"                                     }},
+                {{0x02     }, {type::video_stream                , "video_stream_descriptor"                      }},
+                {{0x03     }, {type::audio_stream                , "audio_stream_descriptor"                      }},
+                {{0x04     }, {type::hierarchy                   , "hierarchy_descriptor"                         }},
+                {{0x05     }, {type::registration                , "registration_descriptor"                      }},
+                {{0x06     }, {type::data_stream_alignment       , "data_stream_alignment_descriptor"             }},
+                {{0x07     }, {type::target_background_grid      , "target_background_grid_descriptor"            }},
+                {{0x08     }, {type::video_window                , "Video_window_descriptor"                      }},
+                {{0x09     }, {type::ca                          , "CA_descriptor"                                }},
+                {{0x0A     }, {type::iso_639_language            , "ISO_639_language_descriptor"                  }},
+                {{0x0B     }, {type::system_clock                , "System_clock_descriptor"                      }},
+                {{0x0C     }, {type::multiplex_buffer_utilization, "Multiplex_buffer_utilization_descriptor"      }},
+                {{0x0D     }, {type::copyright                   , "Copyright_descriptor"                         }},
+                {{0x0E     }, {type::maximum_bitrate             , "Maximum_bitrate_descriptor"                   }},
+                {{0x0F     }, {type::private_data_indicator      , "Private_data_indicator_descriptor"            }},
+                {{0x10     }, {type::smoothing_buffer            , "Smoothing_buffer_descriptor"                  }},
+                {{0x11     }, {type::std                         , "STD_descriptor"                               }},
+                {{0x12     }, {type::ibp                         , "IBP_descriptor"                               }},
+                {{0x13,0x1A}, {type::defined                     , "Defined in ISO/IEC 13818-6"                   }},
+                {{0x1B     }, {type::mpeg_4_video                , "MPEG-4_video_descriptor"                      }},
+                {{0x1C     }, {type::mpeg_4_audio                , "MPEG-4_audio_descriptor"                      }},
+                {{0x1D     }, {type::iod                         , "IOD_descriptor"                               }},
+                {{0x1E     }, {type::sl                          , "SL_descriptor"                                }},
+                {{0x1F     }, {type::fmc                         , "FMC_descriptor"                               }},
+                {{0x20     }, {type::external_es_id              , "External_ES_ID_descriptor"                    }},
+                {{0x21     }, {type::muxcode                     , "MuxCode_descriptor"                           }},
+                {{0x22     }, {type::fmxbuffersize               , "FmxBufferSize_descriptor"                     }},
+                {{0x23     }, {type::multiplexbuffer             , "MultiplexBuffer_descriptor"                   }},
+                {{0x24,0x3F}, {type::reserved                    , "ITU-T Rec. H.222.0 | ISO/IEC 13818-1 Reserved"}},
+                {{0x40,0xFF}, {type::user_private                , "User Private"                                 }},
             };
             return database;
         }

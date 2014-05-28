@@ -2,7 +2,7 @@
 #define __INCLUDED_TS_PROCESSOR_TS_PSI_PAT_HPP__
 
 #include <ts_processor/ts/psi/base.hpp>
-#include <ts_processor/symbolset.hpp>
+#include <symbolset/symbolset.hpp>
 #include <bitfield/field.hpp>
 #include <bitfield/section/list.hpp>
 #include <cstddef>
@@ -19,10 +19,10 @@ namespace ts_processor { namespace ts { namespace psi {
         using section_number_type         = current_next_indicator_type::next_field< 8>;
         using last_section_number_type    =         section_number_type::next_field< 8>;
         
-        TS_PROCESSOR_SYMBOLSET(pid_type,
+        SYMBOLSET_DEFINE(pid_type, (
             nit,
-            pmt,
-        )
+            pmt
+        ))
         
         union section_type {
             using program_number_type =                 bitfield::field<16>;
