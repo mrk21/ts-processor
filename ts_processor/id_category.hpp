@@ -63,26 +63,26 @@ namespace ts_processor {
     };
     
     
-    template<class Derived>
+    template<class IDCategory>
     class id_category_helper {
         using self = id_category_helper;
         
     protected:
-        static Derived instance;
+        static IDCategory instance;
         
     public:
-        static typename Derived::type type_of(uint32_t id) {
+        static typename IDCategory::type type_of(uint32_t id) {
             try {
                 return self::instance.data.at(id);
             }
             catch (std::out_of_range &) {
-                return Derived::type::invalid;
+                return IDCategory::type::invalid;
             }
         }
     };
     
-    template<class D>
-    D id_category_helper<D>::instance;
+    template<class IDCategory>
+    IDCategory id_category_helper<IDCategory>::instance;
 }
 
 #endif // __INCLUDED_TS_PROCESSOR_ID_CATEGORY_HPP__
