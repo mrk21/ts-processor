@@ -5,7 +5,7 @@
 
 namespace ts_processor { namespace ts {
     // see: ISO/IEC 13818-1, 2.6.1, Table 2-39
-    class descriptor_tag: id_category<descriptor_tag> {
+    class descriptor_tag: public id_category<descriptor_tag> {
         friend class id_category_helper<descriptor_tag>;
         using helper = id_category_helper<descriptor_tag>;
         
