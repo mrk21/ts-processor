@@ -20,8 +20,8 @@ namespace ts_processor { namespace ts { namespace psi {
         using last_section_number_type    =         section_number_type::next_field< 8>;
         
         SYMBOLSET_DEFINE(pid_type, (
-            nit,
-            pmt
+            network,
+            program_map
         ))
         
         union section_type {

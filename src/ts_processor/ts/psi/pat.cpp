@@ -3,8 +3,8 @@
 // pat::section_type
 namespace ts_processor { namespace ts { namespace psi {
     pat::pid_type pat::section_type::type() const {
-        return this->program_number == 0x0000 ? pat::pid_type::nit
-                                              : pat::pid_type::pmt;
+        return this->program_number == 0x0000 ? pat::pid_type::network
+                                              : pat::pid_type::program_map;
     }
 }}}
 

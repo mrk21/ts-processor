@@ -116,7 +116,7 @@ namespace ts_processor {
     void splitter::pat_state::call(ts::packet & packet) {
         if (this->data.push(packet).test(ts::data::push_state::ready)) {
             for (auto & section: this->data->pat.sections) {
-                if (section.type() == ts::psi::pat::pid_type::pmt) {
+                if (section.type() == ts::psi::pat::pid_type::program_map) {
                     this->context->set_pmt_pid(section.pid);
                     this->context->transition<outside::pmt_state>();
                     return;
