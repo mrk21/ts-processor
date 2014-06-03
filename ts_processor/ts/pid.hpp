@@ -20,11 +20,11 @@ namespace ts_processor { namespace ts {
             null
         ))
         
-        enum id: uint16_t {
-            pat  = 0x0000,
-            cat  = 0x0001,
-            tsdt = 0x0002,
-            null = 0x1FFF,
+        struct id {
+            static constexpr uint16_t pat  = 0x0000;
+            static constexpr uint16_t cat  = 0x0001;
+            static constexpr uint16_t tsdt = 0x0002;
+            static constexpr uint16_t null = 0x1FFF;
         };
         
         pid() {
