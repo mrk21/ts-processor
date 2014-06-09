@@ -4,6 +4,7 @@
 #include <ts_processor/ts/packet.hpp>
 #include <ts_processor/ts/psi/pat.hpp>
 #include <ts_processor/ts/psi/pmt.hpp>
+#include <ts_processor/ts/arib/si/eit.hpp>
 #include <bitfield/container/vector.hpp>
 #include <bitset>
 
@@ -16,6 +17,8 @@ namespace ts_processor { namespace ts {
             psi::pmt pmt;
             psi::pat pat;
             pes::base pes;
+            
+            arib::si::eit eit;
         };
         
         enum push_state: uint8_t {
