@@ -24,7 +24,7 @@ go_bandit([]{
         
         describe("#program_info", [&]{
             it("should iterate each descriptor in this list", [&]{
-                auto & program_info = data->pmt.program_info;
+                auto & program_info = data->psi.get<pmt>()->program_info;
                 auto it = program_info.begin();
                 auto end = program_info.end();
                 
@@ -46,7 +46,7 @@ go_bandit([]{
         
         describe("#sections", [&]{
             it("should iterate each fieldset in the section list", [&]{
-                auto & sections = data->pmt.sections;
+                auto & sections = data->psi.get<pmt>()->sections;
                 auto it = sections.begin();
                 auto end = sections.end();
                 

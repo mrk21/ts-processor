@@ -16,7 +16,7 @@
         };
         ts::data data(ts::pid::id::pat); data.push(*packet);
         
-        auto it = data->pat.sections.begin();
+        auto it = data->psi.get<ts::psi::pat>()->sections.begin();
         (++it)->pid = ts::packet{
             #include <fixture/ts/psi/pmt/single_packet.cpp>
         }.pid;
@@ -35,7 +35,7 @@
         };
         ts::data data(packet->pid); data.push(*packet);
         
-        auto it = data->pmt.sections.begin();
+        auto it = data->psi.get<ts::psi::pmt>()->sections.begin();
         (it++)->elementary_pid = type == 0 ? 0x013 : 0x0015;
         (it++)->elementary_pid = type == 0 ? 0x014 : 0x0016;
         

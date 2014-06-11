@@ -33,6 +33,9 @@ namespace ts_processor { namespace ts { namespace psi {
         std::size_t length() const;
         crc_32_type & crc_32();
         const crc_32_type & crc_32() const;
+        
+        template<class PSI>       PSI * get()       { return static_cast<      PSI *>(this); }
+        template<class PSI> const PSI * get() const { return static_cast<const PSI *>(this); }
    };
 }}}
 

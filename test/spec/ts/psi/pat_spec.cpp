@@ -24,7 +24,7 @@ go_bandit([]{
         
         describe("#sections", [&]{
             it("should iterate each fieldset in the section list", [&]{
-                auto & sections = data->pat.sections;
+                auto & sections = data->psi.get<pat>()->sections;
                 auto it = sections.begin();
                 auto end = sections.end();
                 

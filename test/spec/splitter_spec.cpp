@@ -1,5 +1,7 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
 #include <ts_processor/splitter.hpp>
+#include <ts_processor/ts/psi/pat.hpp>
+#include <ts_processor/ts/psi/pmt.hpp>
 #include <bitfield/util.hpp>
 #include <algorithm>
 #include <sstream>
@@ -168,7 +170,7 @@ go_bandit([]{
                 });
                 
                 it("s `context->get_pmt_pid()` should be the first PMT PID in the sections of the PAT packet", [&]{
-                    auto it = data->pat.sections.begin();
+                    auto it = data->psi.get<ts::psi::pat>()->sections.begin();
                     ++it;
                     AssertThat(context->get_pmt_pid(), Equals(it->pid.get()));
                 });
@@ -203,7 +205,7 @@ go_bandit([]{
                 });
                 
                 it("s `context->get_elementary_pid()` should be the first audio PID and video PID in the sections of the PMT packet", [&]{
-                    auto it = data->pmt.sections.begin();
+                    auto it = data->psi.get<ts::psi::pmt>()->sections.begin();
                     uint32_t video_pid = it->elementary_pid;
                     ++it;
                     uint32_t audio_pid = it->elementary_pid;

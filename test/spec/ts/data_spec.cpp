@@ -1,5 +1,6 @@
 #include <bandit_with_gmock/bandit_with_gmock.hpp>
 #include <ts_processor/ts/data.hpp>
+#include <ts_processor/ts/psi/pmt.hpp>
 #include <bitfield/iostream.hpp>
 #include <initializer_list>
 
@@ -246,7 +247,7 @@ go_bandit([]{
                 });
                 
                 it("should build a payload data from the each packets", [&]{
-                    auto & sections = data->fieldset()->pmt.sections;
+                    auto & sections = data->fieldset()->psi.get<psi::pmt>()->sections;
                     auto it = sections.begin();
                     auto end = sections.end();
                     

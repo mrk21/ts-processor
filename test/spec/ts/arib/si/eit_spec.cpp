@@ -21,7 +21,7 @@ go_bandit([]{
         
         describe("#events", [&]{
             it("should iterate each fieldset in the event list", [&]{
-                auto & events = data->eit.events;
+                auto & events = data->psi.get<eit>()->events;
                 auto it = events.begin();
                 auto end = events.end();
                 

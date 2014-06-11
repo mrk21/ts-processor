@@ -1,4 +1,6 @@
 #include <ts_processor/splitter.hpp>
+#include <ts_processor/ts/psi/pat.hpp>
+#include <ts_processor/ts/psi/pmt.hpp>
 #include <sstream>
 #include <regex>
 #include <algorithm>
@@ -115,7 +117,7 @@ namespace ts_processor {
     
     void splitter::pat_state::call(ts::packet & packet) {
         if (this->data.push(packet).test(ts::data::push_state::ready)) {
-            for (auto & section: this->data->pat.sections) {
+            for (auto & section: this->data->psi.get<ts::psi::pat>()->sections) {
                 if (section.type() == ts::psi::pat::pid_type::program_map) {
                     this->context->set_pmt_pid(section.pid);
                     this->context->transition<outside::pmt_state>();
@@ -137,7 +139,7 @@ namespace ts_processor {
             uint32_t audio_pid = 0;
             uint32_t video_pid = 0;
             
-            for (auto & section: this->data->pmt.sections) {
+            for (auto & section: this->data->psi.get<ts::psi::pmt>()->sections) {
                 switch (ts::stream_type::type_of(section.stream_type)) {
                 case ts::stream_type::type::audio:
                     if (audio_pid == 0) audio_pid = section.elementary_pid;

@@ -2,9 +2,6 @@
 #define __INCLUDED_TS_PROCESSOR_TS_DATA_HPP__
 
 #include <ts_processor/ts/packet.hpp>
-#include <ts_processor/ts/psi/pat.hpp>
-#include <ts_processor/ts/psi/pmt.hpp>
-#include <ts_processor/ts/arib/si/eit.hpp>
 #include <bitfield/container/vector.hpp>
 #include <bitset>
 
@@ -14,11 +11,8 @@ namespace ts_processor { namespace ts {
         using type = payload::type;
         
         union fieldset_type {
-            psi::pmt pmt;
-            psi::pat pat;
+            psi::base psi;
             pes::base pes;
-            
-            arib::si::eit eit;
         };
         
         enum push_state: uint8_t {
